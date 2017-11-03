@@ -1,4 +1,5 @@
 import os
+from threading import Thread
 from datetime import datetime
 from flask import Flask, render_template, session, redirect, url_for
 from flask_script import Manager, Shell
@@ -67,12 +68,19 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command("db", MigrateCommand)
 
 
-def send_mail(to, subject, template, **kw):
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
+def send_email(to, subject, template, **kw):
     msg = Message(app.config['FLASK_MAIL_SUBJECT_PREFIX'] + ' ' + subject,
                   sender=app.config['FLASK_MAIL_SENDER'], recipients=[to])
     msg.body = render_template(template + '.txt', **kw)
     msg.html = render_template(template + '.html', **kw)
-    mail.send(msg)
+    thr = Thread(target=send_async_email, args=[app, msg])
+    thr.start()
+    return thr
 
 
 @app.errorhandler(404)
@@ -95,7 +103,7 @@ def index():
             db.session.add(user)
             session['known'] = False
             if app.config['FLASK_ADMIN']:
-                send_mail(app.config['FLASK_ADMIN'], 'New User', 'mail/new_user', user=user)
+                send_email(app.config['FLASK_ADMIN'], 'New User', 'mail/new_user', user=user)
         else:
             session['known'] = True
         session['name'] = form.name.data
