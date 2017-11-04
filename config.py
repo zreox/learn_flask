@@ -13,7 +13,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ZREOX_MAIL_SUBJECT_PREFIX = '[ZreoX]'
-    ZREOX_MAIL_SENDER = 'ZreoX Admin <zhxt0928@163.com>'
+    ZREOX_MAIL_SENDER = 'ZreoX Admin <you@163.com>'
     ZREOX_ADMIN = os.environ.get('ZREOX_ADMIN')
 
     @staticmethod
