@@ -53,7 +53,7 @@ class UserModelTestCase(unittest.TestCase):
         token =u1.generate_confirmation_token()
         self.assertFalse(u2.confirm(token))
 
-    def text_expired_confirmation_token(self):
+    def test_expired_confirmation_token(self):
         u = User(password='dog')
         db.session.add(u)
         db.session.commit()
@@ -131,3 +131,20 @@ class UserModelTestCase(unittest.TestCase):
         last_seen_before = u.last_seen
         u.ping()
         self.assertTrue(u.last_seen > last_seen_before)
+
+    def test_gravatar(self):
+        u = User(email='gon@example.com', password='dog')
+        with self.app.test_request_context('/'):
+            gravatar = u.gravatar()
+            gravatar_256 = u.gravatar(size=256)
+            gravatar_pg = u.gravatar(rating='pg')
+            gravatar_retro = u.gravatar(default='retro')
+        with self.app.test_request_context('/', base_url='https://example.com'):
+            gravatar_ssl = u.gravatar()
+        self.assertTrue('http://www.gravatar.com/avatar/' +
+                        '2335050b18fb0ffe388af9b4beab1c17' in gravatar)
+        self.assertTrue('s=256' in gravatar_256)
+        self.assertTrue('r=pg' in gravatar_pg)
+        self.assertTrue('d=retro' in gravatar_retro)
+        self.assertTrue('https://secure.gravatar.com/avatar/' +
+                        '2335050b18fb0ffe388af9b4beab1c17' in gravatar_ssl)
