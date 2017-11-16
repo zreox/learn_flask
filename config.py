@@ -15,6 +15,7 @@ class Config:
     ZREOX_MAIL_SUBJECT_PREFIX = '[ZreoX]'
     ZREOX_MAIL_SENDER = 'ZreoX Admin <you@163.com>'
     ZREOX_ADMIN = os.environ.get('ZREOX_ADMIN')
+    ZREOX_POSTS_PER_PAGE = 20
 
     @staticmethod
     def init_app(app):
