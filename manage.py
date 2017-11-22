@@ -56,7 +56,23 @@ def profile(length=20, profile_dir=None):
     from werkzeug.contrib.profiler import ProfilerMiddleware
     app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length],
                                       profile_dir=profile_dir)
-    app.run(debug=False)
+    app.run()
+
+
+@manager.command
+def deploy():
+    """Run deployment tasks."""
+    from flask_migrate import upgrade
+    from app.models import Role, User
+
+    # migrate database to latest revision
+    upgrade()
+
+    # create user roles
+    Role.insert_roles()
+
+    # create self-follows for all users
+    User.add_self_follows()
 
 
 if __name__ == '__main__':
