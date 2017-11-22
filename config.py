@@ -7,6 +7,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'anything you can type here'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_RECORD_QUERIES = True
     MAIL_SERVER = 'smtp.163.com'
     MAIL_PORT = 465
     MAIL_USE_SSL = True
@@ -18,6 +19,7 @@ class Config:
     ZREOX_POSTS_PER_PAGE = 20
     ZREOX_FOLLOWERS_PER_PAGE = 20
     ZREOX_COMMENTS_PER_PAGE = 20
+    ZREOX_SLOW_DB_QUERY_TIME = 0.5
 
     @staticmethod
     def init_app(app):
