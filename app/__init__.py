@@ -30,6 +30,10 @@ def create_app(config_name):
     login_manager.init_app(app)
     pagedown.init_app(app)
 
+    if app.config['SSL_REDIRECT']:
+        from flask_sslify import SSLify
+        sslify = SSLify(app)
+
     # implementation of @app.route and @app.errorhandler function through blueprint
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
