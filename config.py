@@ -15,7 +15,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ZREOX_MAIL_SUBJECT_PREFIX = '[ZreoX]'
-    ZREOX_MAIL_SENDER = 'ZreoX Admin <you@163.com>'
+    ZREOX_MAIL_SENDER = 'ZreoX Admin <{}>'.format(os.environ.get('ZREOX_MAIL_SENDER'))
     ZREOX_ADMIN = os.environ.get('ZREOX_ADMIN')
     ZREOX_POSTS_PER_PAGE = 20
     ZREOX_FOLLOWERS_PER_PAGE = 20
